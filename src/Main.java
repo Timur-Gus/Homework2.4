@@ -1,22 +1,34 @@
+import myexceptions.WrongLoginException;
+import myexceptions.WrongPasswordException;
+
 public class Main {
+    public static final String VALID_CHARACTERS = "^[a-zA-Z0-9_]*$";
+
     public static void main(String[] args) {
-//        1. Напишите статический метод, который принимает на вход три параметра: login, password
-//        и confirmPassword.
-//        2. Параметр Login содержит в себе только латинские буквы, цифры и знак подчеркивания.
-//        *Например, java_skypro_go.* У параметра login есть ограничение по длине – он
-//        должен быть равен или меньше 20 символов. Если login длиннее 20 символов или
-//        содержит в себе недопустимые символы, то необходимо выбросить исключение –
-//        `WrongLoginException`.
-//        3. Параметр Password содержит в себе только латинские буквы, цифры и
-//        знак подчеркивания. *Например, D_1hWiKjjP_9.* Если password длиннее 20 символов или
-//        содержит в себе недопустимые символы, то необходимо выбросить исключение –
-//        `WrongPasswordException`.
-//        4. Параметры password и confirmPassword должны быть равны. Если это требование не
-//        соблюдается, то нужно выбросить `WrongPasswordException`.
-//        5. Для обработки исключений используйте multi-catch block.
-//        6. Метод ничего не должен возвращать, если значения параметров подходят под
-//        ограничения,  или бросать исключение, если условия не выполняются.
-//        7. При вызове метода необходимо обработать потенциальные исключения.
+
+        try {
+            registrationCheck("java_skypro_go", "D_1hWiKjjP_9", "D_1hWiKjjP_9");
+        } catch (WrongLoginException | WrongPasswordException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
+    public static void registrationCheck(String login, String password, String confirmPassword) {
+        if (!login.matches(VALID_CHARACTERS)) {
+            throw new WrongLoginException("Вы ввели некорректный символ");
+        }
+        if (login.length() > 20) {
+            throw new WrongLoginException("Логин больше 20 символов");
+        }
+        if (!password.matches(VALID_CHARACTERS)) {
+            throw new WrongPasswordException("Вы ввели некорректный символ");
+        }
+        if (password.length() > 20) {
+            throw new WrongPasswordException("Пароль больше 20 символов");
+        }
+        if (!confirmPassword.equals(password)) {
+            throw new WrongPasswordException("Пароли не совподают");
+        }
+    }
 }
